@@ -13,7 +13,8 @@ function index()
 
 	page = entry({"admin", "system", "licensekey"}, call("action_licensekey"), _("License Key"))
 	page.dependent = true
-
+	
+	entry({"admin", "system", "jimair_status"}, call("action_jimair_status"))
 end
 
 function action_licensekey()
@@ -36,3 +37,15 @@ function action_licensekey()
 	});
 end
 
+function action_jimair_status()
+
+	local file="/tmp/jimair/jimair.stat"
+	local json ="{}"
+	luci.http.prepare_content("application/json")
+	
+	if nixio.fs.access(file) then
+		json = nixio.fs.readfile(file)
+	end
+	
+	luci.http.write_json(json);	
+end

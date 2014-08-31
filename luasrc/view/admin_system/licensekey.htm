@@ -29,5 +29,12 @@ $Id: upgrade.htm 7798 2011-10-26 23:43:04Z jow $
 		<input class="cbi-button cbi-button-reset" type="reset" value="<%:Reset%>" />
 	</div>
 </form>
-
+<script type="text/javascript">//<![CDATA[
+XHR.poll(5, '<%=luci.dispatcher.build_url("admin", "system", "jimair_status")%>', null,
+	function(x, rv)
+	{
+		
+	}
+);
+//]]></script>
 <%+footer%>
