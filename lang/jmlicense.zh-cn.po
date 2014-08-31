@@ -1,0 +1,15 @@
+
+
+msgid "License Key"
+msgstr "授权密钥"
+
+msgid "license has expired!!!"
+msgstr "授权密钥已经过期!!!"
+
+msgid "Set License key strings."
+msgstr "您可以在这里设置您的授权密钥文本."
+
+msgid "License key setting"
+msgstr "授权密钥设置"
+
+
