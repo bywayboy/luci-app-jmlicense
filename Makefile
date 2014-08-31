@@ -5,7 +5,8 @@ PKG_RELEASE:=0.0.1
 
 PKG_BUILD_DIR := $(BUILD_DIR)/$(PKG_NAME)
 
-PO2LMO:=$(shell find $(TOPDIR)/build_dir -name po2lmo | awk 'NR==1')
+PO2LMO:=$(shell find $(TOPDIR)/build_dir/target-*/luci* -name po2lmo | awk '{if(match($$0,/build\/po2lmo/)) print $$0}')
+
 include $(INCLUDE_DIR)/package.mk
 
 define Package/luci-app-jmlicense
