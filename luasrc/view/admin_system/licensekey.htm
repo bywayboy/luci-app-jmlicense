@@ -23,6 +23,20 @@ $Id: upgrade.htm 7798 2011-10-26 23:43:04Z jow $
 		<div class="cbi-value">
 			<textarea class="cbi-input-textarea"  style="width: 100%" rows="10" name="license_key"><%=pcdata(license_key)%></textarea>
 		</div>
+		<div class="cbi-value">
+			<label class="cbi-value-title" for="cbid.system._pass.pw1"><%:Bind Status%></label>
+			<div class="cbi-value-field">
+				<style type="text/css">
+				.ux-tip-list, .ux-tip-list li{margin:0px; pading:0px; list-style:none;}
+				.ux-tip-list li{padding: 3px 0px 3px 0px;display:block;height:auto;overflow:hidden;}
+				.ux-tip-label{color:#000; width:160px;float:left; clear:left; display:block;}
+				</style>
+				<ul class="ux-tip-list">
+				<li><label class="ux-tip-label"><%:Bind Status%>:</label><span id="state-bind-status"> </span></li>
+				<li><label class="ux-tip-label"><%:Username%>:</label><span id="state-username-status"> </span></li>
+				<li><label class="ux-tip-label"><%:Message%>:</label><span id="state-message-id"> </span></li>
+				</ul>
+		</div>
 	</fieldset>
 	<div class="cbi-page-actions">
 		<input class="cbi-button cbi-button-save" type="submit" value="<%:Save%>" />
@@ -33,7 +47,12 @@ $Id: upgrade.htm 7798 2011-10-26 23:43:04Z jow $
 XHR.poll(5, '<%=luci.dispatcher.build_url("admin", "system", "jimair_status")%>', null,
 	function(x, rv)
 	{
-		
+		var hbind = document.getElementById("state-bind-status"),
+		huser = document.getElementById("state-username-status"),
+		hmsg = document.getElementById("state-message-id");
+		hbind.innerHTML= rv.bind? "<%:yes%>":"<%:no%>";
+		huser.innerHTML = (""==rv.username)?"<%:Unknown%>":rv.username;
+		hmsg.innerHTML = (""==rv.message)?"<%:Unknown%>":rv.message;
 	}
 );
 //]]></script>

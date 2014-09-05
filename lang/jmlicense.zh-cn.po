@@ -12,4 +12,12 @@ msgstr "您可以在这里设置您的授权密钥文本."
 msgid "License key setting"
 msgstr "授权密钥设置"
 
+msgid "Bind info"
+msgstr "绑定信息"
+
+msgid "Bind Status"
+msgstr "绑定状态"
+
+msgid "Message"
+msgstr "信息"
 

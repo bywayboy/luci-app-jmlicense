@@ -39,13 +39,14 @@ end
 
 function action_jimair_status()
 
-	local file="/tmp/jimair/jimair.stat"
-	local json ="{}"
+	local file="/var/yifi.stat"
+	local json =  "{\"bind\":false, \"username\":\"\",\"message\":\"\"}"
+	
 	luci.http.prepare_content("application/json")
 	
 	if nixio.fs.access(file) then
 		json = nixio.fs.readfile(file)
 	end
 	
-	luci.http.write_json(json);	
+	luci.http.write(json);	
 end
