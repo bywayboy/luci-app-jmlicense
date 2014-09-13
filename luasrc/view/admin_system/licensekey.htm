@@ -13,11 +13,18 @@ $Id: upgrade.htm 7798 2011-10-26 23:43:04Z jow $
 -%>
 
 <%+header%>
+
+<style type="text/css">
+	.lic-key-ctn{line-height:170%;}
+	.lic-key-label{font-weight:bold;color:#060;padding:0px 20px;}
+	.ux-tip-list, .ux-tip-list li{margin:0px; pading:0px; list-style:none;}
+	.ux-tip-list li{padding: 3px 0px 3px 0px;display:block;height:auto;overflow:hidden;}
+	.ux-tip-label{color:#000; width:160px;float:left; clear:left; display:block;}
+</style>
 <h2><a id="content" name="content"><%:License key setting%></a></h2>
 <div class="cbi-section-descr"><%:Set License key strings.%></div>
-<%if 1 ~= expired then%>
-	<div class="cbi-section-descr"><b style="color:#B00"><%:license has expired!!!%></b></div>
-<% end %>
+<div class="cbi-section-descr lic-key-ctn"><label class="lic-key-label"><%:Key Valid%>:</label><span id="state-valid-status"><%:Collecting data...%></span></div>
+<div class="cbi-section-descr lic-key-ctn"><label class="lic-key-label"><%:Key expires%>:</label><span id="state-expires-status"><%:Collecting data...%></span></div>
 <form name="cbi" action="<%=REQUEST_URI%>" method="post">
 	<fieldset class="cbi-section">
 		<div class="cbi-value">
@@ -26,11 +33,6 @@ $Id: upgrade.htm 7798 2011-10-26 23:43:04Z jow $
 		<div class="cbi-value">
 			<label class="cbi-value-title" for="cbid.system._pass.pw1"><%:Bind Status%></label>
 			<div class="cbi-value-field">
-				<style type="text/css">
-				.ux-tip-list, .ux-tip-list li{margin:0px; pading:0px; list-style:none;}
-				.ux-tip-list li{padding: 3px 0px 3px 0px;display:block;height:auto;overflow:hidden;}
-				.ux-tip-label{color:#000; width:160px;float:left; clear:left; display:block;}
-				</style>
 				<ul class="ux-tip-list">
 				<li><label class="ux-tip-label"><%:Bind Status%>:</label><span id="state-bind-status"> </span></li>
 				<li><label class="ux-tip-label"><%:Username%>:</label><span id="state-username-status"> </span></li>
@@ -53,6 +55,16 @@ XHR.poll(5, '<%=luci.dispatcher.build_url("admin", "system", "jimair_status")%>'
 		hbind.innerHTML= rv.bind? "<%:yes%>":"<%:no%>";
 		huser.innerHTML = (""==rv.username)?"<%:Unknown%>":rv.username;
 		hmsg.innerHTML = (""==rv.message)?"<%:Unknown%>":rv.message;
+	}
+);
+
+XHR.poll(5, '<%=luci.dispatcher.build_url("admin", "system", "jimair_licenstate")%>', null,
+	function(x, rv)
+	{
+		var hvalid = document.getElementById("state-valid-status"),
+		hexpires = document.getElementById("state-expires-status");
+		hvalid.innerHTML= rv.valid? "<%:yes%>":"<%:no%>";
+		hexpires.innerHTML = rv.expires;
 	}
 );
 //]]></script>

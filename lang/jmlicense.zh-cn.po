@@ -1,7 +1,16 @@
 
 
+msgid "no"
+msgstr "否"
+
 msgid "License Key"
 msgstr "授权密钥"
+
+msgid "Key Valid"
+msgstr "密钥生效"
+
+msgid "Key expires"
+msgstr "密钥过期"
 
 msgid "license has expired!!!"
 msgstr "授权密钥已经过期!!!"

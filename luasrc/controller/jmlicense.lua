@@ -15,12 +15,13 @@ function index()
 	page.dependent = true
 	
 	entry({"admin", "system", "jimair_status"}, call("action_jimair_status"))
+	entry({"admin", "system", "jimair_licenstate"}, call("action_jimair_licenstate"))
 end
 
 function action_licensekey()
 	local sys = require "luci.sys"
 	local fs  = require "luci.fs"
-	local license_file = "/etc/licensekey"
+	local license_file = "/etc/licenseKey"
 	local license_key_value = luci.http.formvalue("license_key")
 	
 	if license_key_value then
@@ -30,11 +31,22 @@ function action_licensekey()
 		license_key_value=nixio.fs.readfile(license_file)
 	end
 
-	local expires = nixio.fs.readfile("/etc/licenseconfig")	
 	luci.template.render("admin_system/licensekey", {
-		license_key   = license_key_value,
-		expired	=	expires
+		license_key   = license_key_value
 	});
+end
+
+function action_jimair_licenstate()
+	local file="/etc/licenseconfig"
+	local json =  "{\"valid\":false, \"expires\":\"19700101\"}"
+	
+	luci.http.prepare_content("application/json")
+	
+	if nixio.fs.access(file) then
+		json = nixio.fs.readfile(file)
+	end
+	
+	luci.http.write(json);	
 end
 
 function action_jimair_status()
