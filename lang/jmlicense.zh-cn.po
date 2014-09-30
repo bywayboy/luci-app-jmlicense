@@ -30,3 +30,17 @@ msgstr "绑定状态"
 msgid "Message"
 msgstr "信息"
 
+msgid "MAC white list manage."
+msgstr "MAC 地址白名单管理."
+
+msgid "This page allows you to set MAC address white list."
+msgstr "您可以在本页面设置MAC地址到白名单,在白名单中的计算机将需要与认证"
+
+msgid "White List MAC address"
+msgstr "MAC地址列表"
+
+msgid "MAC White list"
+msgstr "认证白名单"
+
+
+

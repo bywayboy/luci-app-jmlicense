@@ -16,6 +16,11 @@ function index()
 	
 	entry({"admin", "system", "jimair_status"}, call("action_jimair_status"))
 	entry({"admin", "system", "jimair_licenstate"}, call("action_jimair_licenstate"))
+	
+	if nixio.fs.access("/etc/config/devinfo") then
+		page = entry({"admin", "system", "whitelist"}, cbi("admin_system/whitelist"),_("MAC White list"))
+		page.dependent = true
+	end
 end
 
 function action_licensekey()
