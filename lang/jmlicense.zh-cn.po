@@ -45,7 +45,7 @@ msgstr "认证白名单"
 msgid "AP Manager"
 msgstr "AP管理"
 
-msgid "AP list"
+msgid "AP List"
 msgstr "AP列表"
 
 msgid "Model"

@@ -4,7 +4,7 @@ local fs = require "nixio.fs"
 m = Map("ap", translate("AP Manager"),
 	translate("."))
 		
-s = m:section(TypedSection, "ap", translate("AP list"))
+s = m:section(TypedSection, "ap", translate("AP List"))
 s.template = "cbi/tblsection"
 s.anonymous = true
 s.addremove = true
