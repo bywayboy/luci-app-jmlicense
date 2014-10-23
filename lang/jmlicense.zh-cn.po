@@ -42,5 +42,17 @@ msgstr "MAC地址列表"
 msgid "MAC White list"
 msgstr "认证白名单"
 
+msgid "AP Manager"
+msgstr "AP管理"
+
+msigd "AP List"
+msgstr "AP列表"
+
+msgid "Model"
+msgstr "型号"
+
+msgid "Power"
+msgstr "功率"
+
 
 
