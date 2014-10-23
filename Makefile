@@ -44,7 +44,7 @@ endef
 
 define Package/luci-app-jmlicense/install
 	$(INSTALL_DIR) $(1)/etc/config
-	$(CP) $(PKG_BUILD_DIR)/etc/config/* $(1)/etc/config
+	$(CP) ./etc/config/* $(1)/etc/config
 	
 	$(INSTALL_DIR) $(1)/usr/lib/lua/luci/controller
 	$(CP) $(PKG_BUILD_DIR)/luasrc/controller/* $(1)/usr/lib/lua/luci/controller
