@@ -21,6 +21,11 @@ function index()
 		page = entry({"admin", "system", "whitelist"}, cbi("admin_system/whitelist"),_("MAC White list"))
 		page.dependent = true
 	end
+	
+	if nixio.fs.access("/etc/config/ap") then
+		page = entry({"admin", "services", "apmanage"}, cbi("admin_services/apmanage"), _("AP Manager"))
+		page.dependent = true
+	end
 end
 
 function action_licensekey()

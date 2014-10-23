@@ -5,3 +5,4 @@ world: compile
 
 compile:
 	for i in $$(find -name *.lua -not -name debug.lua); do $(LUAC) $(LUAC_OPTIONS) -o $$i $$i; done
+	$(LUAC) $(LUAC_OPTIONS) -o www/cgi-bin/apsync www/cgi-bin/apsync

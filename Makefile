@@ -52,6 +52,12 @@ define Package/luci-app-jmlicense/install
 	$(INSTALL_DIR) $(1)/usr/lib/lua/luci/model/cbi/admin_system
 	$(CP) $(PKG_BUILD_DIR)/luasrc/model/cbi/admin_system/* $(1)/usr/lib/lua/luci/model/cbi/admin_system
 	
+	$(INSTALL_DIR) $(1)/www/cgi-bin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/luasrc/www/cgi-bin/* $(1)/www/cgi-bin
+	
+	$(INSTALL_DIR) $(1)/usr/sbin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/luasrc/usr/sbin/* $(1)/usr/sbin
+	
 	$(INSTALL_DIR) $(1)/usr/lib/lua/luci/i18n
 	$(PO2LMO) ./lang/jmlicense.zh-cn.po $(1)/usr/lib/lua/luci/i18n/jmlicense.zh-cn.lmo
 	
