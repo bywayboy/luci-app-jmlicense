@@ -2,9 +2,9 @@ local wa = require "luci.tools.webadmin"
 local fs = require "nixio.fs"
 
 m = Map("ap", translate("AP Manager"),
-	translate("."))
+	translate("This page allows you to manage AP router below, please do not modify the MAC, model. Configuration effect within 2 minutes."))
 		
-s = m:section(TypedSection, "ap", translate("AP List"), translate("This page allows you to manage AP router below, please do not modify the MAC, model."))
+s = m:section(TypedSection, "ap", translate("AP List"))
 s.template = "cbi/tblsection"
 s.anonymous = true
 s.addremove = true
