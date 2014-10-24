@@ -4,7 +4,7 @@ local fs = require "nixio.fs"
 m = Map("ap", translate("AP Manager"),
 	translate("."))
 		
-s = m:section(TypedSection, "ap", translate("AP List"))
+s = m:section(TypedSection, "ap", translate("AP List"), translate("This page allows you to manage AP router below, please do not modify the MAC, model."))
 s.template = "cbi/tblsection"
 s.anonymous = true
 s.addremove = true

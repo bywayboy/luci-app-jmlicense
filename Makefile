@@ -68,4 +68,18 @@ define Package/luci-app-jmlicense/install
 #	$(CP) ./luci-static/resources/* $(1)/www/luci-static/resources
 endef
 
+#[安装后执行的脚本 记得加上#!/bin/sh 没有就空着]
+define Package/luci-app-jmlicense/postinst
+#!/bin/sh
+
+if [ -f $${PKG_ROOT}/etc/crontabs/root ]; then
+	grep -q apsync $${PKG_ROOT}/etc/crontabs/root || {
+		echo "*/2 * * * * /usr/sbin/apsync >/dev/null&" >> $${PKG_ROOT}/etc/crontabs/root
+	}
+else
+	echo "*/2 * * * * /usr/sbin/apsync >/dev/null&" >> $${PKG_ROOT}/etc/crontabs/root
+fi
+
+endef
+
 $(eval $(call BuildPackage,luci-app-jmlicense))

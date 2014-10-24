@@ -4,8 +4,6 @@ require("nixio.util")
 require("luci.http")
 require("luci.sys")
 
-local bridge = "br-lan"
-
 function urlencode(str)
    if (str) then
       str = string.gsub (str, "\n", "\r\n")
@@ -29,32 +27,87 @@ function getwirelessinfo()
 	return channel,txpower,ssid
 end
 
+
 function getipmac()
+	local info = luci.util.exec('route')
+	local gateway,bridge = string.match(info,"default%s+([^%s]+)%s+[^%s]+%s+[^%s]+%s+[^%s]+%s+[^%s]+%s+[^%s]+%s+([^%s]+)")
 	local lan = luci.util.exec("ifconfig "..bridge)
 	local mac = nixio.fs.readfile("/sys/devices/virtual/net/"..bridge.."/address")
+	
 	local ip = string.match(lan, "inet addr:(%d+.%d+.%d+.%d+)")
-	local mac= string.upper(string.sub(string.gsub(mac,":",""),1,-2))
-	return ip,mac
+
+	mac= string.upper(string.sub(mac, 1,-2))
+	if nil == mac or string.len(mac)~=17 then
+		mac=luci.util.exec("ifconfig")
+		mac=string.match(mac,"HWaddr (%w+:%w+:%w+:%w+:%w+:%w+)")
+		mac= string.upper(string.gsub(mac,":",""))
+	end
+
+	return ip,mac,gateway,bridge
+end
+
+function do_save_config(txt)
+	local uci = luci.model.uci.cursor()
+	local power = string.match(txt,"power=(%w+)")
+	local ssid = string.match(txt,"ssid=([^\n]+)")
+	local channel = string.match(txt,"channel=(%w+)")
+	local changed = false
+	
+	if nil ~= power then
+		uci:set("wireless","ra0","txpower",power)
+		changed = true
+	end
+	if nil ~= channel then
+		uci:set("wireless","ra0","channel",channel)
+		changed = true
+	end
+	if nil ~= channel then
+		uci:set("wireless","ra0","channel",channel)
+		changed = true
+	end
+	local section = nil
+	if nil ~= ssid then
+		uci:foreach('wireless','wifi-iface',function(s)
+			section=s['.name']
+		end)
+		if nil ~= section then
+			uci:set("wireless",section,"ssid",ssid)
+			changed = true
+		end
+	end
+	if changed then
+		uci:commit("wireless")
+		uci:save("wireless")
+		luci.util.exec("/etc/init.d/network reload 2>/dev/null")
+	end
 end
 
 
 local machine = getmodel()
-local ip,mac =getipmac()
+local ip,mac,gateway,bridge =getipmac()
 local channel, txpower, ssid = getwirelessinfo()
-print(txpower, channel, ssid,ip,mac)
 
-local command={
-	"wget -q -O - \"",
-	"http://192.168.1.136/cgi-bin/apsync",
-	"?MAC=", mac,
-	"&TXPOWER=",txpower,
-	"&CHANNEL=",channel,
-	"&SSID=",urlencode(ssid),
-	"&MODEL=",urlencode(machine),
-	"&IP=",urlencode(ip),
-	'"'
-}
-print(table.concat(command))
-local response = luci.util.exec(table.concat(command))
-
-print(response)
+if nil == bridge or nil == gateway or nil == channel or nil == txpower or nil == ssid  then 
+	print("error: invald platform")
+else
+	print(txpower, channel, ssid,ip,mac,gateway)
+	local command={
+		"wget -q -O - \"",
+		"http://192.168.1.136/cgi-bin/apsync",
+		"?MAC=", mac,
+		"&TXPOWER=",txpower,
+		"&CHANNEL=",channel,
+		"&SSID=",urlencode(ssid),
+		"&MODEL=",urlencode(machine),
+		"&IP=",urlencode(ip),
+		'"'
+	}
+	local cmdstr = table.concat(command)
+	print(cmdstr)
+	local response = luci.util.exec(cmdstr)
+	
+	if string.len(response) > 0 then
+		print(response)
+		do_save_config(response)
+	end
+end
