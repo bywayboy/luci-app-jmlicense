@@ -36,8 +36,8 @@ function getipmac()
 	
 	local ip = string.match(lan, "inet addr:(%d+.%d+.%d+.%d+)")
 
-	mac= string.upper(string.sub(mac, 1,-2))
-	if nil == mac or string.len(mac)~=17 then
+	mac= string.upper(string.sub(string.gsub(mac,":",""), 1,-2))
+	if nil == mac or string.len(mac)~=12 then
 		mac=luci.util.exec("ifconfig")
 		mac=string.match(mac,"HWaddr (%w+:%w+:%w+:%w+:%w+:%w+)")
 		mac= string.upper(string.gsub(mac,":",""))
@@ -87,13 +87,13 @@ local machine = getmodel()
 local ip,mac,gateway,bridge =getipmac()
 local channel, txpower, ssid = getwirelessinfo()
 
-if nil == bridge or nil == gateway or nil == channel or nil == txpower or nil == ssid  then 
+if nil == ip or nil == bridge or nil == gateway or nil == channel or nil == txpower or nil == ssid  then 
 	print("error: invald platform")
 else
 	print(txpower, channel, ssid,ip,mac,gateway)
 	local command={
 		"wget -q -O - \"",
-		"http://192.168.1.136/cgi-bin/apsync",
+		"http://"..gateway.."/cgi-bin/apsync",
 		"?MAC=", mac,
 		"&TXPOWER=",txpower,
 		"&CHANNEL=",channel,
