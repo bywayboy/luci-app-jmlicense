@@ -75,10 +75,10 @@ function apgetdispatch(request, prefix)
 		local changed = false
 		for key,val in pairs(node) do
 			if val ~= get[key] then
-				if 'ip'==key then
-				-- 需要保存的值
-					uci:set('ap',node,'ip',get[key])
-				else if 'ip' ~= key and 'nick' ~= key and string.sub(key,1,1) ~='.' then
+				if "ip"==key then
+					changed = true
+					uci:set("ap",node['.name'], key, get[key])
+				elseif 'nick' ~= key and string.sub(key,1,1) ~='.' then
 					diff[key]=val
 				end
 			end
