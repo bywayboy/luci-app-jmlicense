@@ -47,6 +47,7 @@ function apgetdispatch(request, prefix)
 		["power"]=luci.http.formvalue("TXPOWER"),
 		["channel"]=luci.http.formvalue("CHANNEL"),
 		["ssid"]=luci.http.formvalue("SSID"),
+		['maxassoc']=luci.http.formvalue("MAXASSOC"),
 	}
 	local diff = {}
 
@@ -103,7 +104,6 @@ function entry()
 		ltn12.sink.file(io.stderr)
 	)
 
-	--local x = coroutine.create(luci.dispatcher.httpdispatch)
 	local x = coroutine.create(apgetdispatch)
 	local hcache = ""
 	local active = true

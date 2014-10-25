@@ -57,5 +57,8 @@ msgstr "型号"
 msgid "Power"
 msgstr "功率"
 
+msgid "Assoc"
+msgstr "连接数"
+
 
 

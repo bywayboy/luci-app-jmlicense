@@ -24,7 +24,8 @@ function getwirelessinfo()
 	local channel = uci.get("wireless","ra0","channel")
 	local txpower = uci.get("wireless","ra0","txpower")
 	local ssid = uci:get_first("wireless","wifi-iface","ssid")
-	return channel,txpower,ssid
+	local maxassoc = uci.get("wireless","ra0","maxassoc")
+	return channel,txpower,ssid,maxassoc
 end
 
 
@@ -37,7 +38,7 @@ function getipmac()
 	local ip = string.match(lan, "inet addr:(%d+.%d+.%d+.%d+)")
 
 	mac= string.upper(string.sub(string.gsub(mac,":",""), 1,-2))
-	if nil == mac or string.len(mac)~=12 then
+	if nil == mac or string.len(mac)~=17 then
 		mac=luci.util.exec("ifconfig")
 		mac=string.match(mac,"HWaddr (%w+:%w+:%w+:%w+:%w+:%w+)")
 		mac= string.upper(string.gsub(mac,":",""))
@@ -46,11 +47,12 @@ function getipmac()
 	return ip,mac,gateway,bridge
 end
 
-function do_save_config(txt)
+function savewirelessinfo(txt)
 	local uci = luci.model.uci.cursor()
 	local power = string.match(txt,"power=(%w+)")
 	local ssid = string.match(txt,"ssid=([^\n]+)")
 	local channel = string.match(txt,"channel=(%w+)")
+	local maxassoc = tonumber(string.match(txt,"maxassoc=(%w+)"))
 	local changed = false
 	
 	if nil ~= power then
@@ -75,6 +77,14 @@ function do_save_config(txt)
 			changed = true
 		end
 	end
+
+	if nil ~=maxassoc then
+		uci:set("wireless","ra0","maxassoc",maxassoc)
+		changed = true
+	elseif nil ~= uci:get("wireless","ra0","maxassoc") then
+		uci:delete("wireless","ra0","	")
+		changed = true
+	end
 	if changed then
 		uci:commit("wireless")
 		uci:save("wireless")
@@ -85,13 +95,13 @@ end
 
 local machine = getmodel()
 local ip,mac,gateway,bridge =getipmac()
-local channel, txpower, ssid = getwirelessinfo()
+local channel, txpower, ssid, maxassoc = getwirelessinfo()
 
-if nil == ip or nil == bridge or nil == gateway or nil == channel or nil == txpower or nil == ssid  then 
+if nil == bridge or nil == gateway or nil == channel or nil == txpower or nil == ssid  then 
 	print("error: invald platform")
 else
-	print(txpower, channel, ssid,ip,mac,gateway)
-	local command={
+	print(txpower, channel, ssid,ip,mac,gateway,maxassoc)
+	local cmd={
 		"wget -q -O - \"",
 		"http://"..gateway.."/cgi-bin/apsync",
 		"?MAC=", mac,
@@ -100,14 +110,19 @@ else
 		"&SSID=",urlencode(ssid),
 		"&MODEL=",urlencode(machine),
 		"&IP=",urlencode(ip),
-		'"'
 	}
-	local cmdstr = table.concat(command)
-	print(cmdstr)
-	local response = luci.util.exec(cmdstr)
+	if nil ~=maxassoc then
+		cmd[1+#cmd] = '&MAXASSOC='
+		cmd[1+#cmd] = maxassoc
+	end
+	cmd[1+#cmd] = '"'
+
+	local cmdstr = table.concat(cmd)
+
+	local txt = luci.util.exec(cmdstr)
 	
-	if string.len(response) > 0 then
-		print(response)
-		do_save_config(response)
+	if string.len(txt) > 0 then
+		print(txt)
+		savewirelessinfo(txt)
 	end
 end
