@@ -50,7 +50,9 @@ define Package/luci-app-jmlicense/install
 	$(CP) $(PKG_BUILD_DIR)/luasrc/controller/* $(1)/usr/lib/lua/luci/controller
 	
 	$(INSTALL_DIR) $(1)/usr/lib/lua/luci/view/admin_system
+	$(INSTALL_DIR) $(1)/usr/lib/lua/luci/view/cbi
 	$(CP) $(PKG_BUILD_DIR)/luasrc/view/admin_system/* $(1)/usr/lib/lua/luci/view/admin_system
+	$(CP) $(PKG_BUILD_DIR)/luasrc/view/cbi/* $(1)/usr/lib/lua/luci/view/cbi
 	
 	$(INSTALL_DIR) $(1)/usr/lib/lua/luci/model/cbi/admin_system
 	$(CP) $(PKG_BUILD_DIR)/luasrc/model/cbi/admin_system/* $(1)/usr/lib/lua/luci/model/cbi/admin_system
