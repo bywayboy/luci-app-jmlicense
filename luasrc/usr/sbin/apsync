@@ -82,7 +82,7 @@ function savewirelessinfo(txt)
 		uci:set("wireless","ra0","maxassoc",maxassoc)
 		changed = true
 	elseif nil ~= uci:get("wireless","ra0","maxassoc") then
-		uci:delete("wireless","ra0","	")
+		uci:delete("wireless","ra0","maxassoc")
 		changed = true
 	end
 	if changed then
