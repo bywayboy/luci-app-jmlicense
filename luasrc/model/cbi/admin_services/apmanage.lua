@@ -14,15 +14,23 @@ t = s:option(Value, "nick", translate("Name"))
 
 
 t = s:option(Value, "macaddr", translate("MAC"))
+t.template = "cbi/displayvalue"
 t.datatype = "macaddr"
-t.disabled  = true
 
 t = s:option(Value, "model", translate("Model"))
+t.template = "cbi/displayvalue"
+
 t = s:option(ListValue, "channel", translate("Channel"))
 t:value("auto")
 for v=1,13 do
 	t:value(v)
 end
+
+t = s:option(ListValue, "maxassoc", translate("Assoc"))
+for v=8,64,8 do
+	t:value(v)
+end
+t:value("nolimit")
 
 t = s:option(ListValue, "power", translate("Power"))
 for v=10,100,10 do
